@@ -18,7 +18,7 @@ if query:
         st.dataframe(result)
         # 產生簡易回應
         toxic_class = result.iloc[0]["特定化學物質類別"]
-        st.info(f"此物質屬於 **{toxic_class} 毒化物**，建議確認是否需申請相關文件或許可證。")
+        st.info(f"此物質屬於 **{toxic_class} 級毒化物**，建議確認是否需申請相關文件或許可證。")
     else:
         st.warning("❌ 查無此物質，請確認名稱或 CAS No. 是否正確。")
 
