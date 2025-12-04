@@ -10,7 +10,7 @@ df = pd.read_csv("toxic_list.csv")
 detail_df = pd.read_csv("toxic_detail.csv")
 
 # LM Studio API 設定
-LM_API_URL = "http://127.0.0.1:1234/v1/chat/completions"
+LM_API_URL = "http://192.168.1.109:1234/v1/chat/completions"
 
 def ask_lmstudio(prompt):
     payload = {
