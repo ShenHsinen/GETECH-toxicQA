@@ -60,7 +60,6 @@ if st.button("🔍 查詢"):
                 else:
                     st.warning(f"⚠️ 查無「{toxic_class}」的詳細資料。")
         else:
-            st.warning("❌ 查無任何符合的物質，請確認名稱或 CAS No. 是否正確。\n
-            查詢新化學物質 https://csnn.osha.gov.tw/content/home/Substance_Home.aspx")
+            st.warning("❌ 查無任何符合的物質，請確認名稱或 CAS No. 是否正確。\n 查詢新化學物質 https://csnn.osha.gov.tw/content/home/Substance_Home.aspx")
     else:
         st.info("請先輸入至少一項查詢內容再按下『查詢』。")
