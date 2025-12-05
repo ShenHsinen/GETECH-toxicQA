@@ -67,13 +67,13 @@ if st.button("🔍 查詢"):
             # 僅當使用者輸入單一 CAS No. 時提供自動跳轉
             if len(cas_queries) == 1:
                 cas = cas_queries[0]
-                csnn_url = f"https://csnn.osha.gov.tw/content/home/Substance_Query_Q.aspx?CASNO={cas}"
+                csnn_url = f"https://csnn.osha.gov.tw/content/home/Substance_Query.aspx"
 
                 st.markdown(
                     f'<a href="{csnn_url}" target="_blank" '
                     'style="font-size:18px; padding:10px; '
                     'background:#4CAF50; color:white; border-radius:8px; '
-                    'text-decoration:none;">🔗 前往 CSNN 查詢（CAS 已自動帶入）</a>',
+                    'text-decoration:none;">🔗 前往 CSNN 查詢</a>',
                     unsafe_allow_html=True
                 )
             else:
