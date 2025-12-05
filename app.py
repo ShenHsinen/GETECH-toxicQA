@@ -1,3 +1,19 @@
+import streamlit as st
+import pandas as pd
+
+st.title("🔍 毒化物查詢與應對問答系統")
+
+# 讀取資料
+df = pd.read_csv("toxic_list.csv")
+detail_df = pd.read_csv("toxic_detail.csv")  # 詳細資訊檔案
+
+# 查詢區
+query = st.text_area(
+    "請輸入產品名稱或 CAS No.（可多筆，用逗號或換行分隔）", 
+    placeholder="例如：50-00-0, 75-07-0\n或輸入：甲醛, 乙醛"
+)
+
+# 查詢按鈕
 if st.button("🔍 查詢"):
     if query.strip():
         # 分割輸入內容
