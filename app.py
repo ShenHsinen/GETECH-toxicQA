@@ -59,7 +59,29 @@ if st.button("🔍 查詢"):
                     st.write(f"**審核時間：** {d['審核時間']}")
                 else:
                     st.warning(f"⚠️ 查無「{toxic_class}」的詳細資料。")
+
         else:
-            st.warning("❌ 查無任何符合的物質，請確認名稱或 CAS No. 是否正確。\n 查詢新化學物質 https://csnn.osha.gov.tw/content/home/Substance_Home.aspx")
+            # 查無結果：提示 + 自動 CSNN 查詢按鈕
+            st.error("❌ 本地資料庫查無此物質。")
+
+            # 僅當使用者輸入單一 CAS No. 時提供自動跳轉
+            if len(cas_queries) == 1:
+                cas = cas_queries[0]
+                csnn_url = f"https://csnn.osha.gov.tw/content/home/Substance_Query_Q.aspx?CASNO={cas}"
+
+                st.markdown(
+                    f'<a href="{csnn_url}" target="_blank" '
+                    'style="font-size:18px; padding:10px; '
+                    'background:#4CAF50; color:white; border-radius:8px; '
+                    'text-decoration:none;">🔗 前往 CSNN 查詢（CAS 已自動帶入）</a>',
+                    unsafe_allow_html=True
+                )
+            else:
+                st.info("如需查詢新化學物質，可前往 CSNN：")
+                st.markdown(
+                    "[CSNN 新化學物質查詢首頁](https://csnn.osha.gov.tw/content/home/Substance_Home.aspx)",
+                    unsafe_allow_html=True
+                )
+
     else:
         st.info("請先輸入至少一項查詢內容再按下『查詢』。")
