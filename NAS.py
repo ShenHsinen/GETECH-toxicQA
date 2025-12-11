@@ -1,44 +1,44 @@
 import streamlit as st
 import pandas as pd
 
+# 固定讀取 Excel（不用上傳）
+file_path = "/mnt/data/標準品_test.xlsx"
+df = pd.read_excel(file_path)
+
 st.title("🔍 產品毒化物查詢系統")
 
-# 讀取資料
-df = pd.read_csv("toxic_NAS.csv")
+# 讓使用者輸入產品編號
+prod_no = st.text_input("請輸入產品編號 (Product#)：")
 
-# G 至 N 欄位 = 毒化物類別
-type_cols = df.columns[6:14]
+# 定義毒化物欄位（G~N）
+hazard_cols = df.columns[6:14]  # 依 G~N 排列，確認為第7~14欄
 
-# 計算毒化物類型
-def get_toxin_types(row):
-    types = []
-    for col in type_cols:
-        if str(row[col]).strip().upper() == "Y":
-            types.append(col.split("\n")[0])  # 取換行前
-    return ",".join(types) if types else ""
-
-# 建立查詢資料表
-df["毒化物類型"] = df.apply(get_toxin_types, axis=1)
-
-# 查詢輸入欄位
-product_input = st.text_input("請輸入產品編號（Product#）")
-
-if product_input:
-    result = df[df["Product#"].astype(str) == product_input]
+if prod_no:
+    result = df[df["Product#"] == prod_no]
 
     if result.empty:
-        st.warning("⚠️ 查無此產品編號，請確認輸入是否正確。")
+        st.warning("查無此產品編號")
     else:
-        st.subheader("📌 查詢結果")
+        row = result.iloc[0]
 
-        # 產品是否含毒化物
-        toxin_type = result["毒化物類型"].iloc[0]
+        # 計算濃度：Weight / Conversion
+        try:
+            concentration_value = row["Weight"] / row["Conversion"]
+            concentration = f"{concentration_value:.4f}"
+        except:
+            concentration = "資料錯誤"
 
-        if toxin_type == "":
-            st.success("✅ 此產品 **不含毒化物**")
-        else:
-            st.error(f"❗ 此產品 **含毒化物**：{toxin_type}")
+        # 找出哪些毒化物欄位是 Y → 顯示表頭
+        hazards = [col for col in hazard_cols if str(row[col]).upper() == "Y"]
+        hazard_str = "、".join(hazards) if hazards else "無毒化物"
 
-        # 顯示資料詳細內容
-        st.write("產品詳細資料：")
-        st.dataframe(result, use_container_width=True)
+        # 顯示
+        st.subheader("查詢結果")
+
+        st.write(f"**產品編號 (Product#)：** {row['Product#']}")
+        st.write(f"**濃度 (Weight ÷ Conversion)：** {concentration}")
+        st.write(f"**毒化物類型：** {hazard_str}")
+
+        # 顯示原始資料（可選）
+        with st.expander("查看原始資料"):
+            st.dataframe(result)
