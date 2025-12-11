@@ -1,34 +1,51 @@
 import streamlit as st
 import pandas as pd
 
-st.title("🔍 毒化物查詢表 自動產生工具（自動讀取檔案）")
+st.title("🔍 產品毒化物查詢系統")
 
-# 直接讀取檔案（請確保檔名與路徑正確）
+# 固定讀取 Excel（請確認檔案放在同資料夾）
 file_path = "標準品確認清單_NAS.xlsx"
-df = pd.read_excel(file_path)
 
+try:
+    df = pd.read_excel(file_path)
+    st.success(f"📄 成功載入資料：{file_path}")
+except:
+    st.error("❌ 找不到檔案，請確認路徑或檔名是否正確。")
+    st.stop()
 
-# 取 G~N 欄位（根據你提供的原始格式）
+# G 至 N 欄位 = 毒化物類別
 type_cols = df.columns[6:14]
 
-# 建立毒化物類型
-def build_toxin_types(row):
+# 計算毒化物類型
+def get_toxin_types(row):
     types = []
     for col in type_cols:
-        val = str(row[col]).strip().upper()
-        if val == "Y":
-            types.append(col.split("\n")[0])  # 取換行前名稱
+        if str(row[col]).strip().upper() == "Y":
+            types.append(col.split("\n")[0])  # 取換行前
     return ",".join(types) if types else ""
 
-# 建立輸出 DataFrame
-out = pd.DataFrame({
-    "產品編號": df["Product#"].astype(str),
-    "Cas No.": df["CAS#"].astype(str).replace("nan", ""),
-    "毒化物類型": df.apply(build_toxin_types, axis=1),
-    "是否需要核可文件": "",  # 之後可加入第二檔合併
-    "濃度": df["Weight\nConversion"].apply(lambda x: "" if pd.isna(x) else str(x) + "%"),
-    "備註": df["備註"].fillna("")
-})
+# 建立查詢資料表
+df["毒化物類型"] = df.apply(get_toxin_types, axis=1)
 
-st.subheader("📋 毒化物查詢表（自動讀取檔案）")
-st.dataframe(out, use_container_width=True)
+# 查詢輸入欄位
+product_input = st.text_input("請輸入產品編號（Product#）")
+
+if product_input:
+    result = df[df["Product#"].astype(str) == product_input]
+
+    if result.empty:
+        st.warning("⚠️ 查無此產品編號，請確認輸入是否正確。")
+    else:
+        st.subheader("📌 查詢結果")
+
+        # 產品是否含毒化物
+        toxin_type = result["毒化物類型"].iloc[0]
+
+        if toxin_type == "":
+            st.success("✅ 此產品 **不含毒化物**")
+        else:
+            st.error(f"❗ 此產品 **含毒化物**：{toxin_type}")
+
+        # 顯示資料詳細內容
+        st.write("產品詳細資料：")
+        st.dataframe(result, use_container_width=True)
