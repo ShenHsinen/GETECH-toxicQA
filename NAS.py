@@ -28,7 +28,7 @@ if pid:
                 results.append({
                     "Cas No.": row['CAS#'],
                     "濃度": row['WeightConversion'],
-                    "毒化物類型": ", ".join(cols_with_Y),
+                    "需申請文件類別": ", ".join(cols_with_Y),
                     "備註": f"{row.get('備註', '')}, {row.get('備註2', '')}"
                 })
 
