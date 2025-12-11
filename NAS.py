@@ -4,14 +4,8 @@ import pandas as pd
 st.title("🔍 產品毒化物查詢系統")
 
 # 固定讀取 Excel（請確認檔案放在同資料夾）
-file_path = "toxic_NAS.xlsx"
+    df = pd.read_excel("toxic_NAS.xlsx")
 
-try:
-    df = pd.read_excel(file_path)
-    st.success(f"📄 成功載入資料：{file_path}")
-except:
-    st.error("❌ 找不到檔案，請確認路徑或檔名是否正確。")
-    st.stop()
 
 # G 至 N 欄位 = 毒化物類別
 type_cols = df.columns[6:14]
