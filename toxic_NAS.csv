@@ -1,5 +1,4 @@
-﻿Product#,Sub-Kit PN,CAS#,ComponentName,"Weight
-Conversion",% (w/w),"毒化物
+﻿Product#,Sub-Kit PN,CAS#,ComponentName,"WeightConversion",% (w/w),"毒化物
 Toxic","關注化學物質
 Concerned Chemical Substances","優先化學品
 Priority substance","管制性
@@ -8101,4 +8100,5 @@ ICC-300,IC cations 125ML,7697-37-2,NITRIC ACID,0.198,% (w/w),N,N,N 2目少量,N,
 ICC-300,IC cations 125ML,12125-02-9,ammonium chloride,0.1186,% (w/w),N,N,N,N,N,N,N,N 少量,,,,,,,,,,,,,,,
 ICC-300,IC cations 125ML,7631-99-4,sodium nitrate,0.0739,% (w/w),N,N,N 2目少量,N,N,N,N,N 少量,,,,,,,,,,,,,,,
 ICC-300,IC cations 125ML,7757-79-1,potassium nitrate,0.0517,% (w/w),N,N,N 2目少量,N,N,N,N,N 年用量無超過,,,,,,,,,,,,,,,
+
 ICC-300,IC cations 125ML,554-13-2,lithium carbonate,0.0266,% (w/w),N,N,N,N,N,N,N,N 少量,,,,,,,,,,,,,,,
