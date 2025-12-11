@@ -3,9 +3,8 @@ import pandas as pd
 
 st.title("🔍 產品毒化物查詢系統")
 
-# 固定讀取 Excel（請確認檔案放在同資料夾）
-    df = pd.read_excel("toxic_NAS.xlsx")
-
+# 讀取資料
+df = pd.read_csv("toxic_NAS.csv")
 
 # G 至 N 欄位 = 毒化物類別
 type_cols = df.columns[6:14]
