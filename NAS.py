@@ -7,7 +7,7 @@ df = pd.read_csv("toxic_NAS.csv")
 st.title("🔍 毒化物成分查詢系統")
 
 # 使用者輸入產品編號
-prod_no = st.text_input("請輸入產品編號 (Product#)：")
+prod_no = st.text_input("請輸入產品編號：")
 
 # 定義毒化物欄位（G~N）
 hazard_cols = df.columns[6:14]  # 確保是第7~14欄
@@ -42,5 +42,5 @@ if prod_no:
         st.write(f"**CAS Number：** {row['CAS#']}")
         st.write(f"**濃度 (WeightConversion)：** {concentration}")
         st.write(f"**毒化物類型：** {toxin_type}")
-        st.write(f"**是否需要相關文件：** {require_docs}")
+        st.write(f"**是否需要相關文件：** ")
         st.write(f"**備註：** {row['備註']}")
