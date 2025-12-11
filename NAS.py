@@ -2,8 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # 固定讀取 Excel（不用上傳）
-file_path = "/mnt/data/標準品_test.xlsx"
-df = pd.read_excel(file_path)
+df = pd.read_csv("toxic_NAS.csv")
 
 st.title("🔍 產品毒化物查詢系統")
 
