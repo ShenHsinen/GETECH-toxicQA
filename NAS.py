@@ -21,14 +21,14 @@ if pid:
         found = False
         for idx, row in subset.iterrows():
             # 找出 G~N 欄位為 'Y' 的欄位
-            cols_with_Y = [col for col in cols_to_check if row[col] == 'Y']
+            cols_with_Y = col for col in cols_to_check if row[col] == 'Y'
             if cols_with_Y:
                 found = True
                 st.write({
-                    "Cas No.": row['CAS#'],
-                    "濃度": row['WeightConversion'],
-                    "毒化物類型": cols_with_Y,
-                    "備註": f"{row.get('備註', '')}, {row.get('備註2', '')}"
+                    Cas No.: row['CAS#'],
+                    濃度: row['WeightConversion'],
+                    毒化物類型: cols_with_Y,
+                    備註: f"{row.get('備註', '')}, {row.get('備註2', '')}"
                 })
 
         if not found:
