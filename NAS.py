@@ -16,7 +16,7 @@ if pid:
     subset = df[df['產品編號'] == pid]
 
     if subset.empty:
-        st.warning("查無此產品編號，請嘗試輸入Cas No.來查詢")
+        st.warning("查無此產品編號")
     else:
         # 用來存結果的 list
         results = []
