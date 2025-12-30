@@ -16,7 +16,7 @@ if pid:
     subset = df[df['產品編號'] == pid]
 
     if subset.empty:
-        st.warning("找不到此產品編號")
+        st.warning("查無此產品編號，請嘗試輸入Cas No.來查詢")
     else:
         # 用來存結果的 list
         results = []
@@ -27,7 +27,7 @@ if pid:
             if cols_with_Y:
                 results.append({
                     "Cas No.": row['CAS NO'],
-                    "濃度": f"{row.get('濃度', '')}, {row.get('單位', '')}",
+                    "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
                     "需申請文件類別": ", ".join(cols_with_Y),
                     "申請文件類別": row['申請文件類別'],
                     "產品包裝": row['產品包裝']
@@ -38,4 +38,4 @@ if pid:
             result_df = pd.DataFrame(results)
             st.dataframe(result_df)  # 或 st.table(result_df)
         else:
-            st.info("這個產品在 F~M 欄位沒有 'Y'")
+            st.info("無需申請文件")
