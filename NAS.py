@@ -5,6 +5,7 @@ st.title("🔍 毒化物查詢系統")
 
 # 讀取 CSV
 df = pd.read_csv("List_NAS.csv")
+df_doc = pd.read_csv("Document_NAS.csv")
 
 # 設定要檢查的欄位範圍（G~N）
 cols_to_check = df.columns[5:13]  # 假設 F~M 是第7~14欄
@@ -38,6 +39,29 @@ if pid:
             result_df = pd.DataFrame(results)
             st.subheader(f"產品編號:{pid}")
             st.dataframe(result_df.reset_index(drop=True))
+
+            # 🔽 取得所有申請文件類別（去除重複）
+    doc_types = set()
+
+    for r in results:
+        if r.get("申請文件類別"):
+            # 如果是「A,B,C」這種格式
+            for d in str(r["申請文件類別"]).split(","):
+                doc_types.add(d.strip())
+
+    if doc_types:
+        st.subheader("📄 需準備的相關文件")
+
+        # 從第二個檔案中篩選
+        doc_subset = df_doc[df_doc["申請文件類別"].isin(doc_types)]
+
+        if doc_subset.empty:
+            st.info("找不到對應的文件需求資料")
+        else:
+            st.dataframe(doc_subset.reset_index(drop=True))
+    else:
+        st.success("此產品無需準備任何申請文件")
+
 
         else:
             st.info("無需申請文件")
