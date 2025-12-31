@@ -39,7 +39,7 @@ if pid:
             # 轉成 DataFrame 顯示表格
             result_df = pd.DataFrame(results)
             st.subheader(f"產品編號:{pid}")
-            st.dataframe(result_df.reset_index(drop=True))
+            st.table(result_df.reset_index(drop=True))
 
         else:
             st.info("無需申請文件")
