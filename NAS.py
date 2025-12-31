@@ -28,8 +28,9 @@ if pid:
             if cols_with_Y:
                 results.append({
                     "Cas No.": row['CAS NO'],
+                    "成分名稱": row['成份名稱']
                     "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
-                    "需申請文件類別": ", ".join(cols_with_Y),
+                    "類別": ", ".join(cols_with_Y),
                     "申請文件類別": row['申請文件類別'],
                     "產品包裝": row['產品包裝']
                 })
