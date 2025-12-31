@@ -28,7 +28,7 @@ if pid:
             if cols_with_Y:
                 results.append({
                     "Cas No.": row['CAS NO'],
-                    "成分名稱": row['成份名稱']
+                    "成分名稱": row['成分名稱']
                     "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
                     "類別": ", ".join(cols_with_Y),
                     "申請文件類別": row['申請文件類別'],
@@ -62,7 +62,10 @@ if pid:
             if doc_subset.empty:
                 st.info("找不到對應的文件需求資料")
             else:
-            st.table(doc_subset.reset_index(drop=True))
+            doc_subset_display = doc_subset.reset_index(drop=True)
+            doc_subset_display.index = [''] * len(doc_subset_display)
+
+            st.table(doc_subset_display)
 
         else:
             st.success("此產品無需準備任何申請文件")
