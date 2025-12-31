@@ -28,9 +28,8 @@ if pid:
             if cols_with_Y:
                 results.append({
                     "Cas No.": row['CAS NO'],
-                    "成分名稱": row['成份名稱'],
                     "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
-                    "類別": ", ".join(cols_with_Y),
+                    "需申請文件類別": ", ".join(cols_with_Y),
                     "申請文件類別": row['申請文件類別'],
                     "產品包裝": row['產品包裝']
                 })
@@ -39,7 +38,7 @@ if pid:
             # 轉成 DataFrame 顯示表格
             result_df = pd.DataFrame(results)
             st.subheader(f"產品編號:{pid}")
-            st.table(result_df.reset_index(drop=True))
+            st.dataframe(result_df.reset_index(drop=True))
 
         else:
             st.info("無需申請文件")
