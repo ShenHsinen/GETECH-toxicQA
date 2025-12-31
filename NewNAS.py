@@ -19,58 +19,62 @@ pids_input = st.text_area(
     "請輸入產品編號（可用逗號、空格或換行分隔多個）"
 )
 
-if pids_input:
-    # 拆成多個產品編號，去掉空白
-    pids = [p.strip() for p in pids_input.replace('\n', ',').split(',') if p.strip()]
+# 新增查詢按鈕
+if st.button("查詢"):
+    if not pids_input.strip():
+        st.warning("請先輸入產品編號")
+    else:
+        # 拆成多個產品編號，去掉空白
+        pids = [p.strip() for p in pids_input.replace('\n', ',').split(',') if p.strip()]
 
-    for pid in pids:
-        st.subheader(f"產品編號：{pid}")
+        for pid in pids:
+            st.subheader(f"產品編號：{pid}")
 
-        subset = df[df['產品編號'] == pid]
+            subset = df[df['產品編號'] == pid]
 
-        if subset.empty:
-            st.warning("查無此產品編號")
-            continue
+            if subset.empty:
+                st.warning("查無此產品編號")
+                continue
 
-        # -------------------- 查毒化物成分 --------------------
-        results = []
-        for _, row in subset.iterrows():
-            cols_with_Y = [
-                col for col in cols_to_check
-                if 'Y' in str(row[col]).upper()
-            ]
-            if cols_with_Y:
-                results.append({
-                    "Cas No.": row.get('CAS NO', ''),
-                    "成分名稱": row.get('成分名稱', ''),
-                    "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
-                    "申請文件類別": row.get('申請文件類別', ''),
-                    "備註": row.get('產品包裝', '')
-                })
+            # -------------------- 查毒化物成分 --------------------
+            results = []
+            for _, row in subset.iterrows():
+                cols_with_Y = [
+                    col for col in cols_to_check
+                    if 'Y' in str(row[col]).upper()
+                ]
+                if cols_with_Y:
+                    results.append({
+                        "Cas No.": row.get('CAS NO', ''),
+                        "成分名稱": row.get('成分名稱', ''),
+                        "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
+                        "申請文件類別": row.get('申請文件類別', ''),
+                        "備註": row.get('產品包裝', '')
+                    })
 
-        if results:
-            result_df = pd.DataFrame(results)
-            st.table(result_df)
-        else:
-            st.success("沒有毒化物成分")
-
-        # -------------------- 查文件需求 --------------------
-        doc_types = set()
-        for r in results:
-            if r.get("申請文件類別"):
-                for d in str(r["申請文件類別"]).split("、"):
-                    doc_types.add(d.strip())
-
-        if doc_types:
-            st.subheader("📄 需準備的相關文件")
-            DOC_COL = "參考"
-            if DOC_COL not in df_doc.columns:
-                st.error(f"文件檔中找不到欄位：{DOC_COL}")
+            if results:
+                result_df = pd.DataFrame(results)
+                st.table(result_df)
             else:
-                doc_subset = df_doc[df_doc[DOC_COL].isin(doc_types)]
-                if doc_subset.empty:
-                    st.info("找不到對應的文件需求資料")
+                st.success("沒有毒化物成分")
+
+            # -------------------- 查文件需求 --------------------
+            doc_types = set()
+            for r in results:
+                if r.get("申請文件類別"):
+                    for d in str(r["申請文件類別"]).split("、"):
+                        doc_types.add(d.strip())
+
+            if doc_types:
+                st.subheader("📄 需準備的相關文件")
+                DOC_COL = "參考"
+                if DOC_COL not in df_doc.columns:
+                    st.error(f"文件檔中找不到欄位：{DOC_COL}")
                 else:
-                    st.table(doc_subset)
-        else:
-            st.success("此產品無需準備任何申請文件")
+                    doc_subset = df_doc[df_doc[DOC_COL].isin(doc_types)]
+                    if doc_subset.empty:
+                        st.info("找不到對應的文件需求資料")
+                    else:
+                        st.table(doc_subset)
+            else:
+                st.success("此產品無需準備任何申請文件")
