@@ -3,36 +3,42 @@ import pandas as pd
 
 st.title("🔍 毒化物查詢系統")
 
-# 讀取資料
+# -------------------- 讀取資料 --------------------
 df = pd.read_csv("List_NAS.csv")
 df_doc = pd.read_csv("Document_NAS.csv")
 
-# 清理欄位名稱
+# 清理欄位名稱，去掉多餘空白
 df.columns = df.columns.str.strip()
 df_doc.columns = df_doc.columns.str.strip()
 
-# ====== 檢查文件檔欄位（除錯用，可之後刪）======
-# st.write(df_doc.columns)
-
-# 要檢查是否含 Y 的欄位（G~N）
+# 要檢查是否含 Y 的欄位（假設 G~N）
 cols_to_check = df.columns[5:13]
 
-pid = st.text_input("請輸入產品編號")
+# -------------------- 使用者輸入 --------------------
+pids_input = st.text_area(
+    "請輸入產品編號（可用逗號、空格或換行分隔多個）"
+)
 
-if pid:
-    subset = df[df['產品編號'] == pid]
+if pids_input:
+    # 拆成多個產品編號，去掉空白
+    pids = [p.strip() for p in pids_input.replace('\n', ',').split(',') if p.strip()]
 
-    if subset.empty:
-        st.warning("查無此產品編號")
-    else:
+    for pid in pids:
+        st.subheader(f"產品編號：{pid}")
+
+        subset = df[df['產品編號'] == pid]
+
+        if subset.empty:
+            st.warning("查無此產品編號")
+            continue
+
+        # -------------------- 查毒化物成分 --------------------
         results = []
-
         for _, row in subset.iterrows():
             cols_with_Y = [
                 col for col in cols_to_check
                 if 'Y' in str(row[col]).upper()
             ]
-
             if cols_with_Y:
                 results.append({
                     "Cas No.": row.get('CAS NO', ''),
@@ -42,17 +48,14 @@ if pid:
                     "備註": row.get('產品包裝', '')
                 })
 
-        st.subheader(f"產品編號：{pid}")
-
         if results:
             result_df = pd.DataFrame(results)
             st.table(result_df)
         else:
             st.success("沒有毒化物成分")
 
-        # ====== 查詢文件需求 ======
+        # -------------------- 查文件需求 --------------------
         doc_types = set()
-
         for r in results:
             if r.get("申請文件類別"):
                 for d in str(r["申請文件類別"]).split("、"):
@@ -60,14 +63,11 @@ if pid:
 
         if doc_types:
             st.subheader("📄 需準備的相關文件")
-
-            DOC_COL = "參考" 
-
+            DOC_COL = "參考"
             if DOC_COL not in df_doc.columns:
                 st.error(f"文件檔中找不到欄位：{DOC_COL}")
             else:
                 doc_subset = df_doc[df_doc[DOC_COL].isin(doc_types)]
-
                 if doc_subset.empty:
                     st.info("找不到對應的文件需求資料")
                 else:
