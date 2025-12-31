@@ -60,7 +60,3 @@ if pid:
             st.dataframe(doc_subset.reset_index(drop=True))
     else:
         st.success("此產品無需準備任何申請文件")
-
-
-        else:
-            st.info("無需申請文件")
