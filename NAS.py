@@ -55,7 +55,7 @@ if pid:
             st.subheader("📄 需準備的相關文件")
 
             doc_subset = df_doc[
-                df_doc["申請文件類別"].isin(doc_types)
+                df_doc["參考"].isin(doc_types)
             ]
 
             if doc_subset.empty:
