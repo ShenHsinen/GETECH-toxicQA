@@ -5,6 +5,7 @@ st.title("🔍 毒化物查詢系統")
 
 # 讀取 CSV
 df = pd.read_csv("List_NAS.csv")
+detail_df = pd.read_csv("Document_NAS.csv")
 
 # 設定要檢查的欄位範圍（G~N）
 cols_to_check = df.columns[5:13]  # 假設 F~M 是第7~14欄
@@ -41,3 +42,25 @@ if pid:
 
         else:
             st.info("無需申請文件")
+
+        # -------- 依申請文件類別查第二個檔案 --------
+        doc_types = set()
+
+        for r in results:
+            if r.get("申請文件類別"):
+                for d in str(r["申請文件類別"]).split("、"):
+                    doc_types.add(d.strip())
+
+        if doc_types:
+            st.subheader("📄 需準備的相關文件")
+
+            doc_subset = df_doc[
+                df_doc["申請文件類別"].isin(doc_types)
+            ]
+
+            if doc_subset.empty:
+                st.info("找不到對應的文件需求資料")
+            else:
+                st.dataframe(doc_subset.reset_index(drop=True))
+        else:
+            st.success("此產品無需準備任何申請文件")
