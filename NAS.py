@@ -5,7 +5,7 @@ st.title("🔍 毒化物查詢系統")
 
 # 讀取 CSV
 df = pd.read_csv("List_NAS.csv")
-detail_df = pd.read_csv("Document_NAS.csv")
+df_doc = pd.read_csv("Document_NAS.csv")
 
 # 設定要檢查的欄位範圍（G~N）
 cols_to_check = df.columns[5:13]  # 假設 F~M 是第7~14欄
