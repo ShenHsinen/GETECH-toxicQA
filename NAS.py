@@ -38,7 +38,6 @@ if pid:
                     "Cas No.": row.get('CAS NO', ''),
                     "成分名稱": row.get('成分名稱', ''),
                     "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
-                    "毒化物類型": ", ".join(cols_with_Y),
                     "申請文件類別": row.get('申請文件類別', ''),
                     "備註": row.get('產品包裝', '')
                 })
