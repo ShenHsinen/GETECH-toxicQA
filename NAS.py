@@ -23,7 +23,7 @@ if pid:
 
         for idx, row in subset.iterrows():
             # 找出 F~M 欄位為 'Y' 的欄位
-            cols_with_Y = [col for col in cols_to_check if row[col] == 'Y']
+            cols_with_Y = [col for col in cols_to_check if 'Y' in str(row[col]).upper()]
             if cols_with_Y:
                 results.append({
                     "Cas No.": row['CAS NO'],
@@ -36,6 +36,7 @@ if pid:
         if results:
             # 轉成 DataFrame 顯示表格
             result_df = pd.DataFrame(results)
-            st.dataframe(result_df)  # 或 st.table(result_df)
+            st.subheader(f"產品編號:{pid}")
+            st.dataframe(result_df)  
         else:
             st.info("無需申請文件")
