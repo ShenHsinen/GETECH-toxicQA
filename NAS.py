@@ -11,7 +11,7 @@ df_doc = pd.read_csv("Document_NAS.csv")
 cols_to_check = df.columns[5:13]  # 假設 F~M 是第7~14欄
 
 # 使用者輸入產品編號
-pid = st.text_input("請輸入產品編號")
+pid = st.text_input("請輸入產品編號a")
 
 if pid:
     subset = df[df['產品編號'] == pid]
@@ -40,13 +40,12 @@ if pid:
             st.subheader(f"產品編號:{pid}")
             st.dataframe(result_df.reset_index(drop=True))
 
-            # 🔽 取得所有申請文件類別（去除重複）
+     # 🔽 取得所有申請文件類別（去除重複）
     doc_types = set()
 
     for r in results:
         if r.get("申請文件類別"):
-            # 如果是「A,B,C」這種格式
-            for d in str(r["申請文件類別"]).split(","):
+            for d in str(r["申請文件類別"]).split("、"):
                 doc_types.add(d.strip())
 
     if doc_types:
