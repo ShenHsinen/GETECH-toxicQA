@@ -36,6 +36,7 @@ if pid:
             if cols_with_Y:
                 results.append({
                     "Cas No.": row.get('CAS NO', ''),
+                    "成分名稱": row.get('成分名稱', ''),
                     "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
                     "毒化物類型": ", ".join(cols_with_Y),
                     "申請文件類別": row.get('申請文件類別', ''),
@@ -46,7 +47,7 @@ if pid:
 
         if results:
             result_df = pd.DataFrame(results)
-            st.dataframe(result_df.reset_index(drop=True))
+            st.table(result_df)
         else:
             st.success("沒有毒化物成分")
 
@@ -71,6 +72,6 @@ if pid:
                 if doc_subset.empty:
                     st.info("找不到對應的文件需求資料")
                 else:
-                    st.dataframe(doc_subset.reset_index(drop=True))
+                    st.table(doc_subset)
         else:
             st.success("此產品無需準備任何申請文件")
