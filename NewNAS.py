@@ -25,7 +25,7 @@ if st.button("查詢"):
         st.warning("請先輸入產品編號")
     else:
         # 拆成多個產品編號，去掉空白
-        pids = [p.strip() for p in pids_input.replace('\n', ',').split(',') if p.strip()]
+        pids = [p.strip() for p in pids_input.replace('\n', ',',' ').split(',') if p.strip()]
 
         for pid in pids:
             st.subheader(f"產品編號：{pid}")
