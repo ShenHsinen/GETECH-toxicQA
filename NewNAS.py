@@ -80,28 +80,28 @@ if st.button("查詢"):
                         "產品包裝": row.get("產品包裝", ""),
                         "備註": "、".join(hit_cols)
                     })
-            st.markdown(
-                """
-                <style>
-                /* 強制 dataframe 文字換行 */
-                .dataframe td {
-                    white-space: pre-wrap !important;
-                    word-wrap: break-word !important;
-                }
-                </style>
-                """,
-                unsafe_allow_html=True
-            )
-            # 顯示毒化物結果
+
+            # -------------------- 顯示毒化物結果 --------------------
             if results:
                 result_df = pd.DataFrame(results)
-                st.dataframe(
-                                result_df,
-                                use_container_width=True
-                            )
-
+            
+                # 設定 AgGrid 選項
+                gb = GridOptionsBuilder.from_dataframe(result_df)
+                gb.configure_default_column(
+                    wrapText=True,      # 文字換行
+                    autoHeight=True     # 自動調整列高
+                )
+                grid_options = gb.build()
+            
+                AgGrid(
+                    result_df,
+                    gridOptions=grid_options,
+                    fit_columns_on_grid_load=True,   # 載入時自動調整欄寬
+                    enable_enterprise_modules=False
+                )
             else:
                 st.success("沒有毒化物成分")
+
 
             # -------------------- 查文件需求 --------------------
             doc_types = set()
