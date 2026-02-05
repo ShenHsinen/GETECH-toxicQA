@@ -49,11 +49,6 @@ if st.button("查詢"):
             for _, row in subset.iterrows():
                 hit_cols = []
 
-                # 1️⃣ G~N 欄位：判斷 Y
-                for col in cols_to_check:
-                    if "Y" in str(row[col]).upper():
-                        hit_cols.append(col)
-
                 # 2️⃣ 只針對 G 欄位：N + 限值
                 g_value = str(row[G_COL])
                 if ("N" in g_value) and ("限值" in g_value):
@@ -67,9 +62,9 @@ if st.button("查詢"):
                         "Cas No.": row.get("CAS NO", ""),
                         "成分名稱": row.get("成分名稱", ""),
                         "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
-                        "類別": "、".join(hit_cols),
                         "申請文件類別": row.get("申請文件類別", ""),
-                        "產品包裝": row.get("產品包裝", "")
+                        "產品包裝": row.get("產品包裝", ""),
+                        "備註": "、".join(hit_cols)
                     })
 
             # 顯示毒化物結果
