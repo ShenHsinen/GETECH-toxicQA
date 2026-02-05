@@ -67,7 +67,7 @@ if st.button("查詢"):
                         "Cas No.": row.get("CAS NO", ""),
                         "成分名稱": row.get("成分名稱", ""),
                         "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
-                        "命中欄位": "、".join(hit_cols),
+                        "類別": "、".join(hit_cols),
                         "申請文件類別": row.get("申請文件類別", ""),
                         "產品包裝": row.get("產品包裝", "")
                     })
