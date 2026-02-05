@@ -110,6 +110,9 @@ if st.button("查詢"):
                     if doc_subset.empty:
                         st.info("找不到對應的文件需求資料")
                     else:
-                        st.table(doc_subset)
+                        st.dataframe(
+                            doc_subset,
+                            use_container_width=True
+                        )
             else:
                 st.success("此產品無需準備任何申請文件")
