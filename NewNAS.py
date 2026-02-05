@@ -94,14 +94,12 @@ if st.button("查詢"):
                     autoHeight=True     # 自動調整列高
                 )
                 grid_options = gb.build()
-                row_count = len(result_df)
-                height = row_count * 35  # 假設每列大約 35px
                 AgGrid(
                     result_df,
                     gridOptions=grid_options,
                     fit_columns_on_grid_load=True,   # 載入時自動調整欄寬
                     enable_enterprise_modules=False,
-                    height=height
+                    height=600
                 )
             else:
                 st.success("沒有毒化物成分")
@@ -133,14 +131,12 @@ if st.button("查詢"):
                             autoHeight=True
                         )
                         grid_options_doc = gb_doc.build()
-                        row_counta = len(doc_subset)
-                        heighta = row_counta * 35  # 假設每列大約 35px
                         AgGrid(
                             doc_subset,
                             gridOptions=grid_options_doc,
                             fit_columns_on_grid_load=True,
                             enable_enterprise_modules=False,
-                            height=heighta
+                            height=600
                         )
             else:
                 st.success("此產品無需準備任何申請文件")
