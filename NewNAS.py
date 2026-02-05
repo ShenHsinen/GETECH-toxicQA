@@ -37,20 +37,37 @@ if st.button("查詢"):
                 continue
 
             # -------------------- 查毒化物成分 --------------------
+
+            G_COL = cols_to_check[0]   # G 欄位
+            OTHER_COLS = cols_to_check[1:]  # H~N
+
             results = []
             for _, row in subset.iterrows():
-                cols_with_Y = [
-                    col for col in cols_to_check
-                    if 'Y' in str(row[col]).upper()
-                ]
-                if cols_with_Y:
-                    results.append({
-                        "Cas No.": row.get('CAS NO', ''),
-                        "成分名稱": row.get('成分名稱', ''),
-                        "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
-                        "申請文件類別": row.get('申請文件類別', ''),
-                        "產品包裝": row.get('產品包裝', '')
-                    })
+            hit_cols = []
+        
+            # 1️⃣ G~N 欄位：判斷 Y（原本邏輯）
+            for col in cols_to_check:
+                if 'Y' in str(row[col]).upper():
+                    hit_cols.append(col)
+        
+            # 2️⃣ 只針對 G 欄位：N + 限值
+            g_value = str(row[G_COL])
+            if ('N' in g_value) and ('限值0.1-10%' in g_value):
+                hit_cols.append('G')
+        
+            # 去重
+            hit_cols = list(set(hit_cols))
+        
+            if hit_cols:
+                results.append({
+                    "Cas No.": row.get('CAS NO', ''),
+                    "成分名稱": row.get('成分名稱', ''),
+                    "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
+                    "命中欄位": "、".join(hit_cols),
+                    "申請文件類別": row.get('申請文件類別', ''),
+                    "產品包裝": row.get('產品包裝', '')
+                })
+
 
             if results:
                 result_df = pd.DataFrame(results)
