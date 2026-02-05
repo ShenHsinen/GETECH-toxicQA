@@ -80,7 +80,18 @@ if st.button("查詢"):
                         "產品包裝": row.get("產品包裝", ""),
                         "備註": "、".join(hit_cols)
                     })
-
+            st.markdown(
+                """
+                <style>
+                /* 強制 dataframe 文字換行 */
+                .dataframe td {
+                    white-space: pre-wrap !important;
+                    word-wrap: break-word !important;
+                }
+                </style>
+                """,
+                unsafe_allow_html=True
+            )
             # 顯示毒化物結果
             if results:
                 result_df = pd.DataFrame(results)
