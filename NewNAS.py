@@ -100,7 +100,7 @@ if st.button("查詢"):
                     result_df,
                     gridOptions=grid_options,
                     fit_columns_on_grid_load=True,   # 載入時自動調整欄寬
-                    enable_enterprise_modules=False
+                    enable_enterprise_modules=False,
                     height=height
                 )
             else:
@@ -139,7 +139,7 @@ if st.button("查詢"):
                             doc_subset,
                             gridOptions=grid_options_doc,
                             fit_columns_on_grid_load=True,
-                            enable_enterprise_modules=False
+                            enable_enterprise_modules=False,
                             height=heighta
                         )
             else:
