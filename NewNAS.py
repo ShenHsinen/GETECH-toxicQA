@@ -16,8 +16,8 @@ df_doc = pd.read_csv("Document_NAS.csv")
 df.columns = df.columns.str.strip()
 df_doc.columns = df_doc.columns.str.strip()
 
-# 要檢查是否含 Y 的欄位（假設 G~N）
-cols_to_check = df.columns[5:13]
+# 要檢查是否含 Y 的欄位（假設 F~M）
+cols_to_check = df.columns[5:12]
 
 # -------------------- 使用者輸入 --------------------
 pids_input = st.text_area(
@@ -48,8 +48,8 @@ if st.button("查詢"):
             # -------------------- 查毒化物成分 --------------------
             results = []
 
-            G_COL = cols_to_check[0]        # G 欄位
-            OTHER_COLS = cols_to_check[1:]  # H~N
+            G_COL = cols_to_check[1]        # F 欄位
+            OTHER_COLS = cols_to_check[0:]  # F~M
 
             for _, row in subset.iterrows():
                 st.write("DEBUG G 欄位內容：", repr(str(row[G_COL])))
