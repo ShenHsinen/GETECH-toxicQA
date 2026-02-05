@@ -61,7 +61,7 @@ if st.button("查詢"):
 
                 # 2️⃣ 只針對 G 欄位：N + 限值
                 g_value = str(row[G_COL])
-                if ("N" in g_value) and ("限值" in g_value) and ("0.1-10%" in g_value):
+                if ("N" in g_value) and ("限值" in g_value) and ("0.1-" in g_value):
                     hit_cols.append("關注化學物質 限值0.1-10%")
 
                 # 去重
