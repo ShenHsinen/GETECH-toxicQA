@@ -49,6 +49,11 @@ if st.button("查詢"):
             for _, row in subset.iterrows():
                 hit_cols = []
 
+                # 1️⃣ G~N 欄位：判斷 Y
+                for col in cols_to_check:
+                    if "Y" in str(row[col]).upper():
+                        hit_cols.append(col)
+
                 # 2️⃣ 只針對 G 欄位：N + 限值
                 g_value = str(row[G_COL])
                 if ("N" in g_value) and ("限值" in g_value):
