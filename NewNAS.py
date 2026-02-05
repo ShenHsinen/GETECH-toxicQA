@@ -75,7 +75,11 @@ if st.button("查詢"):
             # 顯示毒化物結果
             if results:
                 result_df = pd.DataFrame(results)
-                st.table(result_df)
+                st.dataframe(
+                                result_df,
+                                use_container_width=True
+                            )
+
             else:
                 st.success("沒有毒化物成分")
 
