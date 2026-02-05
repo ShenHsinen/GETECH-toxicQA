@@ -70,29 +70,29 @@ for _, row in subset.iterrows():
 
 
 
-            if results:
-                result_df = pd.DataFrame(results)
-                st.table(result_df)
-            else:
-                st.success("沒有毒化物成分")
+    if results:
+        result_df = pd.DataFrame(results)
+        st.table(result_df)
+    else:
+        st.success("沒有毒化物成分")
 
-            # -------------------- 查文件需求 --------------------
-            doc_types = set()
-            for r in results:
-                if r.get("申請文件類別"):
-                    for d in str(r["申請文件類別"]).split("、"):
-                        doc_types.add(d.strip())
+# -------------------- 查文件需求 --------------------
+doc_types = set()
+for r in results:
+    if r.get("申請文件類別"):
+        for d in str(r["申請文件類別"]).split("、"):
+            doc_types.add(d.strip())
 
-            if doc_types:
-                st.subheader("📄 需準備的相關文件")
-                DOC_COL = "參考"
-                if DOC_COL not in df_doc.columns:
-                    st.error(f"文件檔中找不到欄位：{DOC_COL}")
-                else:
-                    doc_subset = df_doc[df_doc[DOC_COL].isin(doc_types)]
-                    if doc_subset.empty:
-                        st.info("找不到對應的文件需求資料")
-                    else:
-                        st.table(doc_subset)
-            else:
-                st.success("此產品無需準備任何申請文件")
+if doc_types:
+    st.subheader("📄 需準備的相關文件")
+    DOC_COL = "參考"
+    if DOC_COL not in df_doc.columns:
+        st.error(f"文件檔中找不到欄位：{DOC_COL}")
+    else:
+        doc_subset = df_doc[df_doc[DOC_COL].isin(doc_types)]
+        if doc_subset.empty:
+            st.info("找不到對應的文件需求資料")
+        else:
+            st.table(doc_subset)
+else:
+    st.success("此產品無需準備任何申請文件")
