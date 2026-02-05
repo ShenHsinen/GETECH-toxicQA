@@ -120,12 +120,23 @@ if st.button("查詢"):
                     st.error(f"文件檔中找不到欄位：{DOC_COL}")
                 else:
                     doc_subset = df_doc[df_doc[DOC_COL].isin(doc_types)]
+                    
                     if doc_subset.empty:
                         st.info("找不到對應的文件需求資料")
                     else:
-                        st.dataframe(
+                        # AgGrid 顯示
+                        gb_doc = GridOptionsBuilder.from_dataframe(doc_subset)
+                        gb_doc.configure_default_column(
+                            wrapText=True,
+                            autoHeight=True
+                        )
+                        grid_options_doc = gb_doc.build()
+            
+                        AgGrid(
                             doc_subset,
-                            use_container_width=True
+                            gridOptions=grid_options_doc,
+                            fit_columns_on_grid_load=True,
+                            enable_enterprise_modules=False
                         )
             else:
                 st.success("此產品無需準備任何申請文件")
