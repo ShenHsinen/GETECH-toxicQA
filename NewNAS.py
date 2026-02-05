@@ -94,8 +94,8 @@ if st.button("查詢"):
                     autoHeight=True     # 自動調整列高
                 )
                 grid_options = gb.build()
-            row_count = len(result_df)
-            height = row_count * 35  # 假設每列大約 35px
+                row_count = len(result_df)
+                height = row_count * 35  # 假設每列大約 35px
                 AgGrid(
                     result_df,
                     gridOptions=grid_options,
