@@ -99,7 +99,7 @@ if st.button("查詢"):
                     gridOptions=grid_options,
                     fit_columns_on_grid_load=True,   # 載入時自動調整欄寬
                     enable_enterprise_modules=False,
-                    height=300
+                    height=200
                 )
             else:
                 st.success("沒有毒化物成分")
@@ -136,7 +136,7 @@ if st.button("查詢"):
                             gridOptions=grid_options_doc,
                             fit_columns_on_grid_load=True,
                             enable_enterprise_modules=False,
-                            height=100
+                            height=200
                         )
             else:
                 st.success("此產品無需準備任何申請文件")
