@@ -52,8 +52,6 @@ if st.button("查詢"):
             OTHER_COLS = cols_to_check[0:]  # F~M
 
             for _, row in subset.iterrows():
-                st.write("DEBUG G 欄位內容：", repr(str(row[G_COL])))
-
                 hit_cols = []
 
                 # 1️⃣ G~N 欄位：判斷 Y
