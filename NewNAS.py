@@ -50,39 +50,43 @@ if st.button("查詢"):
             # -------------------- 查毒化物成分 --------------------
             results = []
             
-            G_COL = cols_to_check[1]  # 你確認是「關注化學物質 限值」那一欄
+            G_COL = cols_to_check[1]  # ⚠️ 確認這真的是 G 欄
             
             for _, row in subset.iterrows():
             
-                # ---------- 1️⃣ 是否有任何 Y（決定是否顯示這一列） ----------
+                # ---------- 1️⃣ 條件 A：是否有任何 Y ----------
                 has_y = any(
                     "Y" in str(row[col]).upper()
                     for col in cols_to_check
                 )
             
-                if not has_y:
-                    continue   # 沒有任何 Y，整列不顯示
-            
-                # ---------- 2️⃣ 備註內容（只看 G 欄） ----------
-                hit_cols = []
-            
+                # ---------- 2️⃣ 條件 B：G 欄是否為 限值0.1-10% ----------
                 g_value = str(row[G_COL]).replace(" ", "")
-                if (
+                has_g_limit = (
                     "N" in g_value
                     and "限值" in g_value
                     and ("0.1-10%" in g_value or "0.1–10%" in g_value)
-                ):
+                )
+            
+                # ---------- 3️⃣ 顯示條件（⭐重點：OR） ----------
+                if not (has_y or has_g_limit):
+                    continue
+            
+                # ---------- 4️⃣ 備註只顯示限值 ----------
+                hit_cols = []
+                if has_g_limit:
                     hit_cols.append("關注化學物質 限值0.1-10%")
             
-                # ---------- 3️⃣ 組結果 ----------
+                # ---------- 5️⃣ 組結果 ----------
                 results.append({
                     "Cas No.": row.get("CAS NO", ""),
                     "成分名稱": row.get("成分名稱", ""),
                     "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
                     "申請文件類別": row.get("申請文件類別", ""),
                     "產品包裝": row.get("產品包裝", ""),
-                    "備註": "、".join(hit_cols)  # 沒命中就空白
+                    "備註": "、".join(hit_cols)
                 })
+
 
 
             # -------------------- 顯示毒化物結果 --------------------
