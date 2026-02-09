@@ -54,36 +54,28 @@ if st.button("查詢"):
             OTHER_COLS = cols_to_check[0:]  # F~M
 
             for _, row in subset.iterrows():
-            
-                # ---------- 1️⃣ 是否有任何 Y（決定要不要列出這一列） ----------
-                has_y = any(
-                    "Y" in str(row[col]).upper()
-                    for col in cols_to_check
-                )
-            
-                if not has_y:
-                    continue   # 沒有 Y，整列不要
-            
-                # ---------- 2️⃣ 備註只看 G 欄 ----------
-                remark = ""
-                g_value = str(row[G_COL]).replace(" ", "")
-            
-                if (
-                    "N" in g_value
-                    and "限值" in g_value
+                hit_cols = []
+                # 1️⃣ G~N 欄位：判斷 Y 
+                for col in cols_to_check: 
+                    if "Y" in str(row[col]).upper(): 
+                        hit_cols.append(col)
+                # 2️⃣ 只針對 G 欄位：N + 限值 
+                g_value = str(row[G_COL]).replace(" ", "") 
+                if ( 
+                    "N" in g_value 
+                    and "限值" in g_value 
                     and ("0.1-10%" in g_value or "0.1–10%" in g_value)
-                ):
-                    remark = "關注化學物質 限值0.1-10%"
-            
-                # ---------- 3️⃣ 組結果 ----------
-                results.append({
-                    "Cas No.": row.get("CAS NO", ""),
-                    "成分名稱": row.get("成分名稱", ""),
-                    "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
-                    "申請文件類別": row.get("申請文件類別", ""),
-                    "產品包裝": row.get("產品包裝", ""),
-                    "備註": remark
-                })
+                ): 
+                    hit_cols.append("關注化學物質 限值0.1-10%")
+
+            results.append({
+                "Cas No.": row.get("CAS NO", ""),
+                "成分名稱": row.get("成分名稱", ""),
+                "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
+                "申請文件類別": row.get("申請文件類別", ""),
+                "產品包裝": row.get("產品包裝", ""),
+                "備註": "關注化學物質 限值0.1-10%"
+             })
 
 
             # -------------------- 顯示毒化物結果 --------------------
