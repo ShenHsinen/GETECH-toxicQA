@@ -62,6 +62,7 @@ if st.button("查詢"):
                         hit_cols.append(col)
 
                 # 2️⃣ 只針對 G 欄位：N + 限值
+                hit_cols = []
                 g_value = str(row[G_COL]).replace(" ", "")
                 if (
                     "N" in g_value
