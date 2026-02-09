@@ -49,20 +49,23 @@ if st.button("查詢"):
 
             # -------------------- 查毒化物成分 --------------------
             results = []
-
-            G_COL = cols_to_check[1]        # F 欄位
-            OTHER_COLS = cols_to_check[0:]  # F~M
-
+            
+            G_COL = cols_to_check[1]  # 你確認是「關注化學物質 限值」那一欄
+            
             for _, row in subset.iterrows():
+            
+                # ---------- 1️⃣ 是否有任何 Y（決定是否顯示這一列） ----------
+                has_y = any(
+                    "Y" in str(row[col]).upper()
+                    for col in cols_to_check
+                )
+            
+                if not has_y:
+                    continue   # 沒有任何 Y，整列不顯示
+            
+                # ---------- 2️⃣ 備註內容（只看 G 欄） ----------
                 hit_cols = []
-
-                # 1️⃣ G~N 欄位：判斷 Y
-                for col in cols_to_check:
-                    if "Y" in str(row[col]).upper():
-                        hit_cols.append(col)
-
-                # 2️⃣ 只針對 G 欄位：N + 限值
-                hit_cols = []
+            
                 g_value = str(row[G_COL]).replace(" ", "")
                 if (
                     "N" in g_value
@@ -70,19 +73,16 @@ if st.button("查詢"):
                     and ("0.1-10%" in g_value or "0.1–10%" in g_value)
                 ):
                     hit_cols.append("關注化學物質 限值0.1-10%")
-
-                # 去重
-                hit_cols = list(set(hit_cols))
-
-                if hit_cols:
-                    results.append({
-                        "Cas No.": row.get("CAS NO", ""),
-                        "成分名稱": row.get("成分名稱", ""),
-                        "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
-                        "申請文件類別": row.get("申請文件類別", ""),
-                        "產品包裝": row.get("產品包裝", ""),
-                        "備註": "、".join(hit_cols)
-                    })
+            
+                # ---------- 3️⃣ 組結果 ----------
+                results.append({
+                    "Cas No.": row.get("CAS NO", ""),
+                    "成分名稱": row.get("成分名稱", ""),
+                    "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
+                    "申請文件類別": row.get("申請文件類別", ""),
+                    "產品包裝": row.get("產品包裝", ""),
+                    "備註": "、".join(hit_cols)  # 沒命中就空白
+                })
 
 
             # -------------------- 顯示毒化物結果 --------------------
