@@ -55,10 +55,12 @@ if st.button("查詢"):
 
             for _, row in subset.iterrows():
                 hit_cols = []
+                
                 # 1️⃣ G~N 欄位：判斷 Y 
                 for col in cols_to_check: 
                     if "Y" in str(row[col]).upper(): 
                         hit_cols.append(col)
+                        
                 # 2️⃣ 只針對 G 欄位：N + 限值 
                 g_value = str(row[G_COL]).replace(" ", "") 
                 if ( 
@@ -74,7 +76,7 @@ if st.button("查詢"):
                 "濃度": f"{row.get('濃度', '')}{row.get('單位', '')}",
                 "申請文件類別": row.get("申請文件類別", ""),
                 "產品包裝": row.get("產品包裝", ""),
-                "備註": "關注化學物質 限值0.1-10%"
+                "備註": hit_cols
              })
 
 
