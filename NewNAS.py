@@ -17,8 +17,7 @@ st.markdown(
         margin-bottom: 1rem;
     ">
         <h1 style="margin:0;">🔍 毒化物查詢系統</h1>
-  
-  
+    ()    
         <a href="https://forms.cloud.microsoft/r/5GRAJn4Xry" target="_blank">
             <button style="
                 background-color:#4CAF50;
