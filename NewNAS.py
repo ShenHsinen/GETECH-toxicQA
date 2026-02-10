@@ -101,12 +101,14 @@ if st.button("查詢"):
                 )
                 grid_options = gb.build()
                 AgGrid(
-                    result_df,
+                    result_df.reset_index(drop=True),
                     gridOptions=grid_options,
-                    fit_columns_on_grid_load=True,   # 載入時自動調整欄寬
+                    fit_columns_on_grid_load=True,
                     enable_enterprise_modules=False,
-                    height=200
+                    height=200,
+                    key=f"result_grid_{pid}"   # ⭐ 一定要加
                 )
+
             else:
                 st.success("沒有毒化物成分")
 
@@ -138,11 +140,13 @@ if st.button("查詢"):
                         )
                         grid_options_doc = gb_doc.build()
                         AgGrid(
-                            doc_subset,
+                            doc_subset.reset_index(drop=True),
                             gridOptions=grid_options_doc,
                             fit_columns_on_grid_load=True,
                             enable_enterprise_modules=False,
-                            height=200
+                            height=200,
+                            key=f"doc_grid_{pid}"   # ⭐ 就加這一行
                         )
+
             else:
                 st.success("此產品無需準備任何申請文件")
