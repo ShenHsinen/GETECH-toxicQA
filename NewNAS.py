@@ -132,8 +132,9 @@ if st.button("查詢"):
                     if doc_subset.empty:
                         st.info("找不到對應的文件需求資料")
                     else:
-                        # AgGrid 顯示
-                        gb_doc = GridOptionsBuilder.from_dataframe(doc_subset)
+                        doc_display = doc_subset.drop(columns=[DOC_COL])
+                    
+                        gb_doc = GridOptionsBuilder.from_dataframe(doc_display)
                         gb_doc.configure_default_column(
                             wrapText=True,
                             autoHeight=True
