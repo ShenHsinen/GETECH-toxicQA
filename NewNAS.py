@@ -10,17 +10,23 @@ st.set_page_config(
 
 st.title("🔍 毒化物查詢系統")
 
-col1, col2 = st.columns([8, 2], vertical_alignment="center")
-
-with col1:
-    st.markdown("📣 **請協助填寫 1 分鐘使用回饋，幫助我們優化系統**")
-
-with col2:
-    st.link_button(
-        "📝 填寫回饋",
-        "https://forms.gle/你的問卷連結"
-    )
-
+st.markdown(
+    """
+    <a href="https://forms.gle/你的問卷連結" target="_blank">
+        <button style="
+            background-color:#4CAF50;
+            color:white;
+            padding:10px 20px;
+            border:none;
+            border-radius:6px;
+            font-size:16px;
+            cursor:pointer;">
+            📝 填寫使用回饋問卷
+        </button>
+    </a>
+    """,
+    unsafe_allow_html=True
+)
 
 
 # -------------------- 讀取資料 --------------------
