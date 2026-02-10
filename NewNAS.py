@@ -10,13 +10,17 @@ st.set_page_config(
 
 st.title("🔍 毒化物查詢系統")
 
-st.divider()
-st.info("📣 請協助填寫 1 分鐘使用回饋，幫助我們優化系統")
+col1, col2 = st.columns([3, 1])
 
-st.link_button(
-    "📝 填寫使用回饋問卷",
-    "https://forms.cloud.microsoft/r/5GRAJn4Xry"
-)
+with col1:
+    st.info("📣 請協助填寫 1 分鐘使用回饋，幫助我們優化系統")
+
+with col2:
+    st.link_button(
+        "📝 填寫回饋",
+        "https://forms.cloud.microsoft/r/5GRAJn4Xry"
+    )
+
 
 
 # -------------------- 讀取資料 --------------------
