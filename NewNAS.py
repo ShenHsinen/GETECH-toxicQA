@@ -8,25 +8,33 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("🔍 毒化物查詢系統")
-
 st.markdown(
     """
-    <a href="https://forms.gle/你的問卷連結" target="_blank">
-        <button style="
-            background-color:#4CAF50;
-            color:white;
-            padding:10px 20px;
-            border:none;
-            border-radius:6px;
-            font-size:16px;
-            cursor:pointer;">
-            📝 填寫使用回饋問卷
-        </button>
-    </a>
+    <div style="
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        margin-bottom: 1rem;
+    ">
+        <h1 style="margin:0;">🔍 毒化物查詢系統</h1>
+
+        <a href="https://forms.cloud.microsoft/r/5GRAJn4Xry" target="_blank">
+            <button style="
+                background-color:#4CAF50;
+                color:white;
+                padding:8px 16px;
+                border:none;
+                border-radius:6px;
+                font-size:14px;
+                cursor:pointer;">
+                📝 填寫使用回饋
+            </button>
+        </a>
+    </div>
     """,
     unsafe_allow_html=True
 )
+
 
 
 # -------------------- 讀取資料 --------------------
