@@ -119,24 +119,13 @@ if st.button("查詢"):
 
             # -------------------- 顯示毒化物結果 --------------------
             if results:
-                result_df = pd.DataFrame(results)
+                result_df = pd.DataFrame(results).reset_index(drop=True)
             
-                # 設定 AgGrid 選項
-                gb = GridOptionsBuilder.from_dataframe(result_df)
-                gb.configure_default_column(
-                    wrapText=True,      # 文字換行
-                    autoHeight=True     # 自動調整列高
+                st.dataframe(
+                    result_df,
+                    use_container_width=True,
+                    hide_index=True
                 )
-                grid_options = gb.build()
-                AgGrid(
-                    result_df.reset_index(drop=True),
-                    gridOptions=grid_options,
-                    fit_columns_on_grid_load=True,
-                    enable_enterprise_modules=False,
-                    height=200,
-                    key=f"result_grid_{pid}"   # ⭐ 一定要加
-                )
-
             else:
                 st.success("沒有毒化物成分")
 
