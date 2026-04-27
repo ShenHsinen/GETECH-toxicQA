@@ -42,7 +42,7 @@ def load_data():
     try:
         list_df = pd.read_csv("List_NAS.csv", encoding="utf-8-sig")
         doc_df = pd.read_csv("Document_NAS.csv", encoding="utf-8-sig")
-    except UnicodeDecodeError:
+    except:
         list_df = pd.read_csv("List_NAS.csv", encoding="cp950")
         doc_df = pd.read_csv("Document_NAS.csv", encoding="cp950")
 
@@ -55,33 +55,24 @@ def load_data():
 df, df_doc = load_data()
 
 
-# -------------------- 基本欄位檢查 --------------------
-required_cols = ["產品編號", "CAS NO", "成分名稱", "濃度", "單位", "申請文件類別", "產品包裝"]
-
-missing_cols = [col for col in required_cols if col not in df.columns]
-
-if missing_cols:
-    st.error(f"List_NAS.csv 缺少欄位：{', '.join(missing_cols)}")
-    st.stop()
-
-if "參考" not in df_doc.columns:
-    st.error("Document_NAS.csv 缺少欄位：參考")
-    st.stop()
-
-
-# 產品編號統一轉字串，避免數字格式查不到
+# -------------------- 基本清理 --------------------
 df["產品編號"] = df["產品編號"].astype(str).str.strip()
 
 
-# -------------------- 毒化物類別欄位設定 --------------------
-# 依照你之前的需求：檢查 G~N 欄
-# pandas 欄位索引從 0 開始，所以 G 欄是 index 6，N 欄是 index 13
-if len(df.columns) < 14:
-    st.error("List_NAS.csv 欄位數不足，無法檢查 G~N 欄")
+# -------------------- 找 G~N 欄（用名稱，不用位置） --------------------
+target_cols = []
+
+for col in df.columns:
+    col_clean = str(col).strip().upper()
+    if col_clean in list("GHIJKLMN"):
+        target_cols.append(col)
+
+if not target_cols:
+    st.error("找不到 G~N 欄，請確認欄位名稱")
     st.stop()
 
-cols_to_check = df.columns[6:14]
-G_COL = df.columns[6]
+cols_to_check = target_cols
+G_COL = target_cols[0]  # 第一個就是 G
 
 
 # -------------------- 使用者輸入 --------------------
@@ -110,18 +101,18 @@ if st.button("查詢"):
                 st.warning("查無此產品編號")
                 continue
 
-            # -------------------- 查毒化物成分 --------------------
+            # -------------------- 查毒化物 --------------------
             results = []
 
             for _, row in subset.iterrows():
 
-                # 條件 A：G~N 欄是否有 Y
+                # ⭐ 保留你原本可查的寫法（寬鬆）
                 has_y = any(
-                    str(row[col]).strip().upper() == "Y"
+                    "Y" in str(row[col]).upper()
                     for col in cols_to_check
                 )
 
-                # 條件 B：G 欄是否含「N 限值0.1-10%」
+                # G欄限值判斷
                 g_value = str(row[G_COL]).replace(" ", "").replace("–", "-")
 
                 has_g_limit = (
@@ -147,15 +138,12 @@ if st.button("查詢"):
                     "備註": "、".join(notes)
                 })
 
-            # -------------------- 顯示毒化物結果 --------------------
+            # -------------------- 顯示結果 --------------------
             if results:
                 result_df = pd.DataFrame(results).reset_index(drop=True)
 
                 gb = GridOptionsBuilder.from_dataframe(result_df)
-                gb.configure_default_column(
-                    wrapText=True,
-                    autoHeight=True
-                )
+                gb.configure_default_column(wrapText=True, autoHeight=True)
                 grid_options = gb.build()
 
                 AgGrid(
@@ -164,23 +152,21 @@ if st.button("查詢"):
                     fit_columns_on_grid_load=True,
                     enable_enterprise_modules=False,
                     height=220,
-                    key=f"result_grid_{pid}"
+                    key=f"result_{pid}"
                 )
-
             else:
                 st.success("沒有毒化物成分")
 
-            # -------------------- 查文件需求 --------------------
+            # -------------------- 文件需求 --------------------
             doc_types = set()
 
             for r in results:
-                doc_value = str(r.get("申請文件類別", "")).strip()
+                val = str(r.get("申請文件類別", "")).strip()
 
-                if doc_value and doc_value.lower() != "nan":
-                    for d in re.split("[、,，\n]", doc_value):
-                        d = d.strip()
-                        if d:
-                            doc_types.add(d)
+                if val and val.lower() != "nan":
+                    for d in re.split("[、,，\n]", val):
+                        if d.strip():
+                            doc_types.add(d.strip())
 
             if doc_types:
                 st.subheader("📄 需準備的相關文件")
@@ -190,25 +176,21 @@ if st.button("查詢"):
                 ]
 
                 if doc_subset.empty:
-                    st.info("找不到對應的文件需求資料")
+                    st.info("找不到對應文件")
                 else:
                     doc_display = doc_subset.drop(columns=["參考"]).reset_index(drop=True)
 
                     gb_doc = GridOptionsBuilder.from_dataframe(doc_display)
-                    gb_doc.configure_default_column(
-                        wrapText=True,
-                        autoHeight=True
-                    )
+                    gb_doc.configure_default_column(wrapText=True, autoHeight=True)
                     grid_options_doc = gb_doc.build()
 
                     AgGrid(
-                        doc_display,
+                        doc_display,  # ⭐ 修正這裡
                         gridOptions=grid_options_doc,
                         fit_columns_on_grid_load=True,
                         enable_enterprise_modules=False,
                         height=220,
-                        key=f"doc_grid_{pid}"
+                        key=f"doc_{pid}"
                     )
-
             else:
-                st.success("此產品無需準備任何申請文件")
+                st.success("此產品無需準備文件")
