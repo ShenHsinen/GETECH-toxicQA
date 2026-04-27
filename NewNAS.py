@@ -132,39 +132,33 @@ if st.button("查詢"):
 
             # -------------------- 查文件需求 --------------------
             doc_types = set()
+
             for r in results:
-                if r.get("申請文件類別"):
-                    for d in str(r["申請文件類別"]).split("、"):
-                        doc_types.add(d.strip())
+                val = str(r.get("申請文件類別", "")).strip()
+
+                if val and val.lower() != "nan":
+                    for d in re.split("[、,，\n]", val):
+                        d = d.strip()
+                        if d:
+                            doc_types.add(d)
 
             if doc_types:
                 st.subheader("📄 需準備的相關文件")
-                DOC_COL = "參考"
 
-                if DOC_COL not in df_doc.columns:
-                    st.error(f"文件檔中找不到欄位：{DOC_COL}")
+                doc_subset = df_doc[
+                    df_doc["參考"].isin(doc_types)
+                ]
+
+                if doc_subset.empty:
+                    st.info("找不到對應文件")
                 else:
-                    doc_subset = df_doc[df_doc[DOC_COL].isin(doc_types)]
-                    
-                    if doc_subset.empty:
-                        st.info("找不到對應的文件需求資料")
-                    else:
-                        doc_display = doc_subset.drop(columns=[DOC_COL])
-                    
-                        gb_doc = GridOptionsBuilder.from_dataframe(doc_display)
-                        gb_doc.configure_default_column(
-                            wrapText=True,
-                            autoHeight=True
-                        )
-                        grid_options_doc = gb_doc.build()
-                        AgGrid(
-                            doc_subset.reset_index(drop=True),
-                            gridOptions=grid_options_doc,
-                            fit_columns_on_grid_load=True,
-                            enable_enterprise_modules=False,
-                            height=200,
-                            key=f"doc_grid_{pid}"   # ⭐ 就加這一行
-                        )
+                    doc_display = doc_subset.drop(columns=["參考"]).reset_index(drop=True)
+
+                    st.dataframe(
+                        doc_display,
+                        use_container_width=True,
+                        hide_index=True
+                    )
 
             else:
-                st.success("此產品無需準備任何申請文件")
+                st.success("此產品無需準備文件")
