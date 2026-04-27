@@ -1,4 +1,3 @@
-這個程式碼有問題嗎？
 import streamlit as st
 import pandas as pd
 from st_aggrid import AgGrid, GridOptionsBuilder
