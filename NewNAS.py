@@ -1,15 +1,3 @@
-st.markdown("""
-<style>
-[data-testid="stDataFrame"] div[data-testid="stTable"] table {
-    white-space: normal !important;
-}
-[data-testid="stDataFrame"] td {
-    white-space: normal !important;
-    word-break: break-word !important;
-}
-</style>
-""", unsafe_allow_html=True)
-
 import re
 import streamlit as st
 import pandas as pd
