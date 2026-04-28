@@ -2,6 +2,17 @@ import re
 import streamlit as st
 import pandas as pd
 
+st.markdown("""
+<style>
+[data-testid="stDataFrame"] div[data-testid="stTable"] table {
+    white-space: normal !important;
+}
+[data-testid="stDataFrame"] td {
+    white-space: normal !important;
+    word-break: break-word !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 st.set_page_config(
     page_title="毒化物查詢系統",
